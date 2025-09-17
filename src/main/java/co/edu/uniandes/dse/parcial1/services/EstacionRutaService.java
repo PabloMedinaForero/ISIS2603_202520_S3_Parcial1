@@ -1,5 +1,6 @@
 package co.edu.uniandes.dse.parcial1.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EstacionRutaService {
     private EstacionRepository estacionRepository;
 
     @Transactional
-    public RutaEntity addEstacionRuta(Long id_estacion, Long id_ruta) throws EntityNotFoundException, IllegalOperationException{
+    public EstacionEntity addEstacionRuta(Long id_estacion, Long id_ruta) throws EntityNotFoundException, IllegalOperationException{
         Optional<EstacionEntity> estacion = estacionRepository.findById(id_estacion);
         if (estacion.isEmpty())
             throw new EntityNotFoundException("No se ha encontrado la estación...");
@@ -37,8 +38,8 @@ public class EstacionRutaService {
                 throw new IllegalOperationException("Esta estacion ya existe en la ruta...");
             }
         }
-        ruta.get().getEstaciones().add(estacion.get());
-        return ruta.get();
+        estacion.get().getRutas().add(ruta.get());
+        return estacion.get();
     }
 
     @Transactional
@@ -52,9 +53,27 @@ public class EstacionRutaService {
         Boolean existe = false;
         for (EstacionEntity e: ruta.get().getEstaciones()){
             if (e.equals(estacion.get())){
-                throw new IllegalOperationException("Esta estacion ya existe en la ruta...");
+                existe = true;
             }
+        }
+        if (existe){
+            estacion.get().getRutas().remove(ruta.get());
+        }
+        else{
+            throw new IllegalOperationException("Esta estación no existe en la ruta dada...");
         }
     }
     
+
+    @Transactional
+    public List<RutaEntity> getRutas(Long id_estacion, Long id_ruta) throws EntityNotFoundException {
+        Optional<EstacionEntity> estacion = estacionRepository.findById(id_estacion);
+        if (estacion.isEmpty())
+            throw new EntityNotFoundException("No se ha encontrado la estación...");
+        Optional<RutaEntity> ruta = rutaRepository.findById(id_ruta);
+        if (ruta.isEmpty())
+            throw new EntityNotFoundException("No se ha encontrado la ruta buscada...");
+        List<RutaEntity> rutas = estacion.get().getRutas();
+        return rutas;
+    }
 }
