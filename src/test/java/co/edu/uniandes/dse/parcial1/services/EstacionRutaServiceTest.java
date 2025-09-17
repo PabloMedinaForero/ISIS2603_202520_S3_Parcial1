@@ -87,5 +87,27 @@ public class EstacionRutaServiceTest {
 			estacionRutaService.addEstacionRuta(nuevaEstacion.getId(), 0L);
 		});
     }
-    
+
+
+    @Test
+	void testAddSerieInvalidEstacion() throws EntityNotFoundException, IllegalOperationException {
+		assertThrows(EntityNotFoundException.class, ()->{
+			RutaEntity ruta = factory.manufacturePojo(RutaEntity.class);
+			entityManager.persist(ruta);
+			estacionRutaService.addEstacionRuta(0L, ruta.getId());
+		});
+	}
+
+    //@Test
+    //void testAddEstacionExistente() throws EntityNotFoundException, IllegalOperationException {
+    //    assertThrows(IllegalOperationException.class, ()->{
+	//		EstacionEntity estacion = factory.manufacturePojo(EstacionEntity.class);
+		//	entityManager.persist(estacion);
+      //      RutaEntity ruta = factory.manufacturePojo(RutaEntity.class);
+		//	entityManager.persist(ruta);
+		//	estacionRutaService.addEstacionRuta(estacion.getId(), ruta.getId());
+         //   estacionRutaService.addEstacionRuta(estacion.getId(), ruta.getId());
+		//});
+    //}
+
 }

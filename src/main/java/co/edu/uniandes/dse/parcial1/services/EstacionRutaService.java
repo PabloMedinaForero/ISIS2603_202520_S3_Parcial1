@@ -34,7 +34,7 @@ public class EstacionRutaService {
         if (ruta.isEmpty())
             throw new EntityNotFoundException("No se ha encontrado la ruta buscada...");
         for (EstacionEntity e: ruta.get().getEstaciones()){
-            if (e.equals(estacion.get())){
+            if (e.getName().equals(estacion.get().getName())){
                 throw new IllegalOperationException("Esta estacion ya existe en la ruta...");
             }
         }
