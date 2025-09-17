@@ -1,6 +1,7 @@
 package co.edu.uniandes.dse.parcial1.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,11 @@ public class EstacionRutaServiceTest {
 
     @Test
     void testAddInvalidRuta() throws EntityNotFoundException, IllegalOperationException {
-        
+        assertThrows(EntityNotFoundException.class, ()->{
+			EstacionEntity nuevaEstacion = factory.manufacturePojo(EstacionEntity.class);
+			entityManager.persist(nuevaEstacion);
+			estacionRutaService.addEstacionRuta(nuevaEstacion.getId(), 0L);
+		});
     }
+    
 }
